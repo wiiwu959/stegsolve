@@ -1,16 +1,10 @@
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JTextComponentMatcher;
-import org.assertj.swing.core.GenericTypeMatcher;
-import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
-import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.testing.AssertJSwingTestCaseTemplate;
 import org.junit.*;
-
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
 
 public class AboutFrameTest extends AssertJSwingTestCaseTemplate {
     protected FrameFixture frame;
@@ -33,7 +27,7 @@ public class AboutFrameTest extends AssertJSwingTestCaseTemplate {
         JTextComponentFixture aboutText = frame.textBox(JTextComponentMatcher.any());
         aboutText.requireNotEditable();
         aboutText.requireVisible();
-        Assert.assertNotEquals(aboutText.text().length(), 0);
+        Assert.assertNotEquals(0, aboutText.text().length());
     }
 
     @Test
