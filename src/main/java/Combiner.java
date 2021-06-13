@@ -218,7 +218,7 @@ public class Combiner extends JFrame
         h = transform.getImage().getHeight();
         dp.setSize(transform.getImage().getWidth(),transform.getImage().getHeight());
         dp.setPreferredSize(new Dimension(transform.getImage().getWidth(),transform.getImage().getHeight()));
-        dp.apply(100);
+//        dp.apply(100);
         this.setMaximumSize(getToolkit().getScreenSize());
         pack();
         scrollPane.revalidate();

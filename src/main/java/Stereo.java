@@ -209,7 +209,6 @@ public class Stereo extends JFrame
         dp.setImage(transform.getImage());
         dp.setSize(transform.getImage().getWidth(),transform.getImage().getHeight());
         dp.setPreferredSize(new Dimension(transform.getImage().getWidth(),transform.getImage().getHeight()));
-        dp.apply(100);
         this.setMaximumSize(getToolkit().getScreenSize());
         pack();
         scrollPane.revalidate();

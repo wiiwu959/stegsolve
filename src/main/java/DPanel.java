@@ -59,8 +59,8 @@ public class DPanel extends JPanel
         defaultSize.width = bi.getWidth();
         defaultSize.height = bi.getHeight();
         setSize(bi.getWidth(), bi.getHeight());
+        apply(100);
         repaint();
-        //apply(100);
     }
 
     @Override
