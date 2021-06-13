@@ -249,6 +249,7 @@ public class FrameBrowser extends JFrame
         dp.setImage(frames.get(fnum));
         dp.setSize(bi.getWidth(),bi.getHeight());
         dp.setPreferredSize(new Dimension(bi.getWidth(),bi.getHeight()));
+        dp.apply(100);
         this.setMaximumSize(getToolkit().getScreenSize());
         pack();
         scrollPane.revalidate();
