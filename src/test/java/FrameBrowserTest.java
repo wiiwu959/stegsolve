@@ -3,36 +3,58 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JScrollPaneFixture;
-import org.assertj.swing.testing.AssertJSwingTestCaseTemplate;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
-// method coverage 88% (15/17)
-// saveButtonActionPerformed hard to test
+// method coverage 77% (15/17)
+// also because saveButtonActionPerformed is hard to handle
+// and some try catch will never be trigger
 
-public class StereoTest  extends AssertJSwingTestCaseTemplate {
+public class FrameBrowserTest {
     protected FrameFixture frame;
 
     BufferedImage image = null;
-    protected  StereoTransform transform = null;
+    protected java.util.List<BufferedImage> transform = null;
+    int num = 0;
 
     @Before
     public void setUp() throws IOException {
-        File file = new File("src/test/testcase/minion.jpg");
-        image = (BufferedImage) ImageIO.read(file);
 
-        frame = new FrameFixture(new Stereo(image));
+        File file = new File("src/test/testcase/nyan.gif");
+        transform = new ArrayList<BufferedImage>();
+
+        ImageInputStream input = ImageIO.createImageInputStream(file);
+        ImageReader reader = ImageIO.getImageReaders(input).next();
+        reader.setInput(input);
+        BufferedImage bnext;
+        while(true) {
+            try {
+                bnext = reader.read(num);
+            } catch (IndexOutOfBoundsException e) {
+                bnext = null;
+            }
+            if (bnext == null) {
+                break;
+            }
+            transform.add(bnext);
+            num++;
+        }
+
+        image = (BufferedImage) transform.get(0);
+        frame = new FrameFixture(new FrameBrowser(image, file));
         frame.show();
-        transform = new StereoTransform(image);
     }
 
     @Test
@@ -51,7 +73,7 @@ public class StereoTest  extends AssertJSwingTestCaseTemplate {
         Graphics2D graph = actual.createGraphics();
         panel.paint(graph);
 
-        BufferedImage expect = transform.getImage();
+        BufferedImage expect = transform.get(0);
         Assert.assertEquals(expect.getWidth(), actual.getWidth());
         Assert.assertEquals(expect.getHeight(), actual.getHeight());
 
@@ -68,16 +90,19 @@ public class StereoTest  extends AssertJSwingTestCaseTemplate {
         btn.requireVisible();
         btn.requireEnabled();
         btn.click();
-        transform.forward();
 
         JScrollPaneFixture pane = frame.scrollPane();
+        pane.requireVisible();
+        pane.requireEnabled();
+
         DPanel panel = (DPanel) pane.target().getViewport().getView();
         BufferedImage actual = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D graph = actual.createGraphics();
         panel.paint(graph);
 
-        BufferedImage expect = transform.getImage();
+        BufferedImage expect = transform.get(1);
+
         Assert.assertEquals(expect.getWidth(), actual.getWidth());
         Assert.assertEquals(expect.getHeight(), actual.getHeight());
 
@@ -86,51 +111,27 @@ public class StereoTest  extends AssertJSwingTestCaseTemplate {
                 Assert.assertEquals(expect.getRGB(x, y), actual.getRGB(x, y));
             }
         }
-
     }
 
     @Test
-    public void testBackward(){
+    public void testBack() {
         JButtonFixture btn = frame.button(JButtonMatcher.withText("<"));
         btn.requireVisible();
         btn.requireEnabled();
         btn.click();
-        transform.back();
 
         JScrollPaneFixture pane = frame.scrollPane();
+        pane.requireVisible();
+        pane.requireEnabled();
+
         DPanel panel = (DPanel) pane.target().getViewport().getView();
         BufferedImage actual = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D graph = actual.createGraphics();
         panel.paint(graph);
 
-        BufferedImage expect = transform.getImage();
-        Assert.assertEquals(expect.getWidth(), actual.getWidth());
-        Assert.assertEquals(expect.getHeight(), actual.getHeight());
+        BufferedImage expect = transform.get(11);
 
-        for (int y = 0; y < expect.getHeight(); y++) {
-            for (int x = 0; x < expect.getWidth(); x++) {
-                Assert.assertEquals(expect.getRGB(x, y), actual.getRGB(x, y));
-            }
-        }
-
-    }
-
-    @Test
-    public void testKeyLeft(){
-        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
-        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
-        transform.back();
-        transform.back();
-
-        JScrollPaneFixture pane = frame.scrollPane();
-        DPanel panel = (DPanel) pane.target().getViewport().getView();
-        BufferedImage actual = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
-
-        Graphics2D graph = actual.createGraphics();
-        panel.paint(graph);
-
-        BufferedImage expect = transform.getImage();
         Assert.assertEquals(expect.getWidth(), actual.getWidth());
         Assert.assertEquals(expect.getHeight(), actual.getHeight());
 
@@ -142,20 +143,49 @@ public class StereoTest  extends AssertJSwingTestCaseTemplate {
     }
 
     @Test
-    public void testKeyRight(){
-        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
-        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
-        transform.forward();
-        transform.forward();
+    public void testKeyLeft() {
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
 
         JScrollPaneFixture pane = frame.scrollPane();
+        pane.requireVisible();
+        pane.requireEnabled();
+
         DPanel panel = (DPanel) pane.target().getViewport().getView();
         BufferedImage actual = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D graph = actual.createGraphics();
         panel.paint(graph);
 
-        BufferedImage expect = transform.getImage();
+        BufferedImage expect = transform.get(10);
+
+        Assert.assertEquals(expect.getWidth(), actual.getWidth());
+        Assert.assertEquals(expect.getHeight(), actual.getHeight());
+
+        for (int y = 0; y < expect.getHeight(); y++) {
+            for (int x = 0; x < expect.getWidth(); x++) {
+                Assert.assertEquals(expect.getRGB(x, y), actual.getRGB(x, y));
+            }
+        }
+    }
+
+    @Test
+    public void testKeyRight() {
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
+
+        JScrollPaneFixture pane = frame.scrollPane();
+        pane.requireVisible();
+        pane.requireEnabled();
+
+        DPanel panel = (DPanel) pane.target().getViewport().getView();
+        BufferedImage actual = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D graph = actual.createGraphics();
+        panel.paint(graph);
+
+        BufferedImage expect = transform.get(2);
+
         Assert.assertEquals(expect.getWidth(), actual.getWidth());
         Assert.assertEquals(expect.getHeight(), actual.getHeight());
 
@@ -172,5 +202,4 @@ public class StereoTest  extends AssertJSwingTestCaseTemplate {
         frame = null;
         transform = null;
     }
-
 }
