@@ -14,8 +14,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-// line coverage 100%
-
 public class ExtractTest {
     protected FrameFixture frame;
 
@@ -255,7 +253,7 @@ public class ExtractTest {
     }
 
     @Test
-    public void testSaveTextButton() throws IOException {
+    public void testSaveTextButton() {
         clickAll();
 
         File testTarget = new File("src/test/testcase/results/extract");

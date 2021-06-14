@@ -99,7 +99,7 @@ public class StegSolveTest {
 
     @Test
     public void testImageCombiner(){
-        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/combineImage1.jpg");
 
         JMenuItemFixture item = frame.menuItem(new GenericTypeMatcher<JMenuItem>(JMenuItem.class) {
             @Override
@@ -108,7 +108,81 @@ public class StegSolveTest {
             }
         });
         item.click();
+
+        JFileChooserFixture fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/"));
+        fileChooserFixture.fileNameTextBox().setText("combineImage2.jpg");
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
     }
+
+    @Test
+    public void testImageCombinerFail(){
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/combineImage1.jpg");
+
+        JMenuItemFixture item = frame.menuItem(new GenericTypeMatcher<JMenuItem>(JMenuItem.class) {
+            @Override
+            protected boolean isMatching(JMenuItem item) {
+                return "Image Combiner".equals(item.getText());
+            }
+        });
+        item.click();
+
+        JFileChooserFixture fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.fileNameTextBox().setText("combineImage2.jpg");
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+    }
+
+    @Test
+    public void testSave(){
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+
+        JMenuItemFixture item = frame.menuItem(new GenericTypeMatcher<JMenuItem>(JMenuItem.class) {
+            @Override
+            protected boolean isMatching(JMenuItem item) {
+                return "Save As".equals(item.getText());
+            }
+        });
+        item.click();
+
+        JFileChooserFixture fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+
+        File testTarget = new File("src/test/testcase/results/save.jpg");
+        if(testTarget.exists()) { testTarget.delete(); }
+
+        item.click();
+        fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.fileNameTextBox().setText("save.jpg");
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+
+        testTarget = new File("src/test/testcase/results/solved");
+        Assert.assertTrue(testTarget.exists());
+
+        item.click();
+        fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.fileNameTextBox().setText(new String(new char[300]).replace('\0', '1'));
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+    }
+
+    @Test
+    public void testExit(){
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+
+        JMenuItemFixture item = frame.menuItem(new GenericTypeMatcher<JMenuItem>(JMenuItem.class) {
+            @Override
+            protected boolean isMatching(JMenuItem item) {
+                return "Exit".equals(item.getText());
+            }
+        });
+        item.click();
+        frame.requireNotVisible();
+    }
+
+
 
     @Test
     public void testAbout() throws IOException {
@@ -121,6 +195,7 @@ public class StegSolveTest {
         item.click();
     }
 
+    @Test
     public void testForward() {
         JButtonFixture btn = frame.button(JButtonMatcher.withText(">"));
         btn.requireVisible();

@@ -17,9 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-// method coverage 88% (15/17)
-// saveButtonActionPerformed hard to test
-
 public class StereoTest  extends AssertJSwingTestCaseTemplate {
     protected FrameFixture frame;
 

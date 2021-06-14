@@ -19,9 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-// method coverage 77% (15/17)
-// also because saveButtonActionPerformed is hard to handle
-// and some try catch will never be trigger
+// line coverage 95% (103/108)
+// some try catch will never be trigger
 
 public class FrameBrowserTest {
     protected FrameFixture frame;

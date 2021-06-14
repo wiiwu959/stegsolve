@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.util.Random;
 import java.awt.color.ColorSpace;
 
-// line coverage : 98% some default case cannot touched.
 // TODO: Assert picture (not sure how to do)
 
 public class TransformTest {
