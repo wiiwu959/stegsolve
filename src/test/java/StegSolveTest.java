@@ -19,14 +19,21 @@ import org.assertj.swing.fixture.*;
 public class StegSolveTest {
 
     protected FrameFixture frame = null;
+    protected StegSolve stegSolve = null;
 
     @Before
     public final void setUp() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Constructor<StegSolve> stegSolveConstructor = StegSolve.class.getDeclaredConstructor();
         Assert.assertTrue(Modifier.isPrivate(stegSolveConstructor.getModifiers()));
         stegSolveConstructor.setAccessible(true);
-        frame = new FrameFixture(stegSolveConstructor.newInstance());
+        stegSolve = stegSolveConstructor.newInstance();
+        frame = new FrameFixture(stegSolve);
         frame.show();
+    }
+
+    @Test
+    public void testMain(){
+        stegSolve.main(null);
     }
 
     @Test
@@ -202,7 +209,7 @@ public class StegSolveTest {
         btn.requireEnabled();
         btn.click();
 
-        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        stegSolve.loadImage("src/test/testcase/minion.jpg");
         btn.click();
     }
 
@@ -213,7 +220,7 @@ public class StegSolveTest {
         btn.requireEnabled();
         btn.click();
 
-        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        stegSolve.loadImage("src/test/testcase/minion.jpg");
         btn.click();
     }
 
@@ -221,7 +228,7 @@ public class StegSolveTest {
     public void testKeyLeft() {
         frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
 
-        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        stegSolve.loadImage("src/test/testcase/minion.jpg");
         frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
     }
 
@@ -229,7 +236,7 @@ public class StegSolveTest {
     public void testKeyRight() {
         frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
 
-        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        stegSolve.loadImage("src/test/testcase/minion.jpg");
         frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
     }
 
@@ -244,5 +251,6 @@ public class StegSolveTest {
     public final void tearDown(){
         frame.cleanUp();
         frame = null;
+        stegSolve = null;
     }
 }
