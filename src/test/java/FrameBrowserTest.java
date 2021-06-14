@@ -2,6 +2,7 @@ import org.assertj.swing.core.KeyPressInfo;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
+import org.assertj.swing.fixture.JFileChooserFixture;
 import org.assertj.swing.fixture.JScrollPaneFixture;
 import org.junit.After;
 import org.junit.Assert;
@@ -194,6 +195,29 @@ public class FrameBrowserTest {
                 Assert.assertEquals(expect.getRGB(x, y), actual.getRGB(x, y));
             }
         }
+    }
+
+    @Test
+    public void testSaveButton() {
+        JButtonFixture saveBtn = frame.button(JButtonMatcher.withText("Save"));
+        saveBtn.requireVisible();
+        saveBtn.requireEnabled();
+        saveBtn.click();
+        JFileChooserFixture fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+
+        saveBtn.click();
+        fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.fileNameTextBox().setText("solved");
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+
+        saveBtn.click();
+        fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
+        fileChooserFixture.fileNameTextBox().setText(new String(new char[300]).replace('\0', '1'));
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
     }
 
     @After
