@@ -1,10 +1,8 @@
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.KeyPressInfo;
-import org.assertj.swing.driver.JMenuItemMatcher;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JFileChooserFixture;
 import org.assertj.swing.fixture.JMenuItemFixture;
-import org.assertj.swing.fixture.JPopupMenuFixture;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
+import org.assertj.swing.core.matcher.JButtonMatcher;
+import org.assertj.swing.fixture.*;
 
 public class StegSolveTest {
 
@@ -119,6 +119,50 @@ public class StegSolveTest {
             }
         });
         item.click();
+    }
+
+    public void testForward() {
+        JButtonFixture btn = frame.button(JButtonMatcher.withText(">"));
+        btn.requireVisible();
+        btn.requireEnabled();
+        btn.click();
+
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        btn.click();
+    }
+
+    @Test
+    public void testBack() {
+        JButtonFixture btn = frame.button(JButtonMatcher.withText("<"));
+        btn.requireVisible();
+        btn.requireEnabled();
+        btn.click();
+
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        btn.click();
+    }
+
+    @Test
+    public void testKeyLeft() {
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
+
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_LEFT));
+    }
+
+    @Test
+    public void testKeyRight() {
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
+
+        ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_RIGHT));
+    }
+
+    @Test
+    public void testKeyEnter(){
+        JTextComponentFixture textField = frame.textBox();
+        textField.setText("200");
+        textField.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
     }
 
     @After
