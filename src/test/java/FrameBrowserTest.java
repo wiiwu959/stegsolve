@@ -207,11 +207,17 @@ public class FrameBrowserTest {
         fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
         fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
 
+        File testTarget = new File("src/test/testcase/results/solved");
+        if(testTarget.exists()) { testTarget.delete(); }
+
         saveBtn.click();
         fileChooserFixture = frame.fileChooser();
         fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/results/"));
         fileChooserFixture.fileNameTextBox().setText("solved");
         fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+
+        testTarget = new File("src/test/testcase/results/solved");
+        Assert.assertTrue(testTarget.exists());
 
         saveBtn.click();
         fileChooserFixture = frame.fileChooser();

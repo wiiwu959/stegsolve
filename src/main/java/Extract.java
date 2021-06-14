@@ -535,6 +535,7 @@ public class Extract extends javax.swing.JFrame {
         bitPlanesPanel.add(alphaBitPanel);
         alphaBitPanel.getAccessibleContext().setAccessibleName("alphaBitPanel");
 
+        redBitPanel.setName("redBitPanel");
         redBitPanel.setPreferredSize(new java.awt.Dimension(bitPlanesWidth-10, 34));
 
         redLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -576,6 +577,7 @@ public class Extract extends javax.swing.JFrame {
 
         bitPlanesPanel.add(redBitPanel);
 
+        greenBitPanel.setName("greenBitPanel");
         greenBitPanel.setPreferredSize(new java.awt.Dimension(bitPlanesWidth-10, 34));
 
         greenLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -617,6 +619,7 @@ public class Extract extends javax.swing.JFrame {
 
         bitPlanesPanel.add(greenBitPanel);
 
+        blueBitPanel.setName("blueBitPanel");
         blueBitPanel.setPreferredSize(new java.awt.Dimension(bitPlanesWidth-10, 34));
 
         blueLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -685,6 +688,7 @@ public class Extract extends javax.swing.JFrame {
 
         extractByLabel.setText("Extract By");
         extractByPanel.add(extractByLabel);
+        extractByPanel.setName("extractByPanel");
 
         byGroup.add(byRowButton);
         byRowButton.setSelected(true);
@@ -702,6 +706,7 @@ public class Extract extends javax.swing.JFrame {
 
         bitOrderLabel.setText("Bit Order");
         bitOrderPanel.add(bitOrderLabel);
+        bitOrderPanel.setName("bitOrderPanel");
 
         bitGroup.add(MSBButton);
         MSBButton.setSelected(true);
@@ -715,6 +720,7 @@ public class Extract extends javax.swing.JFrame {
         orderSettingsPanel.add(bitOrderPanel);
 
         bitPlaneOrderPanel.setPreferredSize(new java.awt.Dimension(250, 130));
+        bitPlaneOrderPanel.setName("BitPlaneOrder");
 
         bitPlaneOrderLabel.setText("Bit Plane Order");
 
