@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.awt.image.*;
+import java.lang.reflect.Field;
 import java.util.Random;
 import java.awt.color.ColorSpace;
 
@@ -304,6 +305,16 @@ public class TransformTest {
         transform.back();
         Assert.assertEquals(expect, transform.getText());
         Assert.assertSame(image, transform.getImage());
+    }
+
+    @Test
+    public void testDefault() throws NoSuchFieldException, IllegalAccessException {
+        Field transNum = Transform.class.getDeclaredField("transNum");
+        transNum.setAccessible(true);
+        transNum.set(transform, -2);
+        Assert.assertEquals("", transform.getText());
+        transform.forward();
+        Assert.assertEquals(image, transform.getImage());
     }
 
     @After
