@@ -53,6 +53,22 @@ public class StegSolveTest {
     }
 
     @Test
+    public void testOpen_Fail(){
+        JMenuItemFixture openItem = frame.menuItem(new GenericTypeMatcher<JMenuItem>(JMenuItem.class) {
+            @Override
+            protected boolean isMatching(JMenuItem item) {
+                return "Open".equals(item.getText());
+            }
+        });
+        openItem.click();
+
+        JFileChooserFixture fileChooserFixture = frame.fileChooser();
+        fileChooserFixture.setCurrentDirectory(new File("src/test/testcase/"));
+        fileChooserFixture.fileNameTextBox().setText("123.jpg");
+        fileChooserFixture.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+    }
+
+    @Test
     public void testFileFormat(){
         ((StegSolve) frame.target()).loadImage("src/test/testcase/minion.jpg");
 
