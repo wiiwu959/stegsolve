@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -261,6 +262,24 @@ public class StegSolveTest {
         JTextComponentFixture textField = frame.textBox();
         textField.setText("200");
         textField.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+    }
+
+    @Test
+    public void testKeyTyped() throws AWTException {
+        stegSolve.loadImage("src/test/testcase/minion.jpg");
+
+        Robot robot = new Robot();
+
+        frame.click();
+        robot.mouseWheel(50);
+
+        frame.pressKey(KeyEvent.VK_SHIFT);
+        robot.mouseWheel(50);
+        frame.releaseKey(KeyEvent.VK_SHIFT);
+
+        frame.pressKey(KeyEvent.VK_SHIFT);
+        frame.pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_A));
+        frame.releaseKey(KeyEvent.VK_SHIFT);
     }
 
     @After
